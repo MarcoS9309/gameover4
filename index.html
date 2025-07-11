@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2048 Básico</title>
+  <title>2048 de Marco</title>
   <style>
     body { font-family: Arial; text-align: center; background: #faf8ef; padding: 20px; }
     #game { display: grid; grid-template-columns: repeat(4, 60px); grid-gap: 10px; width: 260px; margin: auto; background: #bbada0; padding: 10px; border-radius: 6px; }
@@ -22,9 +22,10 @@
   </style>
 </head>
 <body>
-  <h1>Juego 2048 Básico creada por Marco</h1>
+  <h1>2048 de Marco</h1>
+  <p>Usa flechas o desliza con el dedo para jugar</p>
   <div id="game"></div>
-  <p>Usa las flechas del teclado para jugar. Saludos.</p>
+  <p style="margin-top:20px; font-size:14px;">Creado por Marco Vinicio</p>
   <script>
     const size = 4;
     let board = [];
@@ -66,7 +67,6 @@
     }
 
     function move(dir) {
-      let moved = false;
       let copy = board.slice();
       for (let r = 0; r < size; r++) {
         let row = [];
@@ -95,6 +95,25 @@
         case "ArrowUp": move("up"); break;
         case "ArrowDown": move("down"); break;
       }
+    });
+
+    // soporte táctil para móvil
+    let touchStartX = 0, touchStartY = 0;
+    document.addEventListener("touchstart", e => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    });
+    document.addEventListener("touchend", e => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      const dy = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 30) move("right");
+        else if (dx < -30) move("left");
+      } else {
+        if (dy > 30) move("down");
+        else if (dy < -30) move("up");
+      }
+      drawBoard();
     });
 
     startGame();
